@@ -1,8 +1,6 @@
 package org.example.models;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class Board {
     final private Integer boardSize;
@@ -17,14 +15,22 @@ public class Board {
         this.players = players;
         this.snakes = snakes;
     }
-    /*
-    Board properties:
-    - Move the player
-    - Should remember all the positions of players
-    - Should remember all the positions of snakes
-    - Should remember all the positions of ladders
-    - Should remember the finish point (size)
-     */
+
+    public Integer getBoardSize() {
+        return boardSize;
+    }
+
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    public List<Ladder> getLadders() {
+        return ladders;
+    }
+
+    public List<Snake> getSnakes() {
+        return snakes;
+    }
 
     public void movePlayer(final Player player, final Integer newPosition) {
         for(Player player1: players) {
@@ -34,14 +40,6 @@ public class Board {
         }
         return;
     }
-
-//    public Integer playerPosition(final Player player) {
-//        for(Player player1: players) {
-//            if (player1.equals(player)) {
-//                return player1
-//            }
-//        }
-//    }
 
     public Integer snakeTailPositionIfAtHead(final Integer position) {
         for (Snake snake: snakes) {

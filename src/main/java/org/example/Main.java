@@ -1,8 +1,6 @@
 package org.example;
 
-import org.example.models.Ladder;
-import org.example.models.Player;
-import org.example.models.Snake;
+import org.example.models.*;
 import org.example.service.GameController;
 
 import java.util.ArrayList;
@@ -14,37 +12,32 @@ public class Main {
         System.out.println("Enter the number of snakes followed by n lines each containing there head and tail");
 
         Scanner sc = new Scanner(System.in);
-        List<Snake> snakes = new ArrayList<>(sc.nextInt());
-        for (Snake snake: snakes) {
-            snake.setHead(sc.nextInt());
-            snake.setHead(sc.nextInt());
+        Integer noOfSnakes = sc.nextInt();
+        List<Snake> snakes = new ArrayList<>();
+        for (int i = 0; i < noOfSnakes; i++) {
+            snakes.add(new Snake(sc.nextInt(), sc.nextInt()));
         }
-
 
         System.out.println("Enter the number of ladders followed by n lines each containing there start and end position");
 
-        List<Ladder> ladders = new ArrayList<>(sc.nextInt());
-        for (Ladder ladder: ladders) {
-            ladder.setBottomPosition(sc.nextInt());
-            ladder.setTopPosition(sc.nextInt());
+        List<Ladder> ladders = new ArrayList<>();
+        Integer noOfLadders = sc.nextInt();
+        for (int i = 0; i < noOfLadders; i++) {
+            ladders.add(new Ladder(sc.nextInt(), sc.nextInt()));
         }
 
         System.out.println("Enter the number of players followed by n lines each containing there names");
 
-        List<Player> players = new ArrayList<>(sc.nextInt());
-        for (Player player: players) {
-            player.setName(sc.next());
-            player.setPosition(0);
+        List<Player> players = new ArrayList<>();
+        Integer noOfPlayers = sc.nextInt();
+        for (int i = 0; i < noOfPlayers; i++) {
+            players.add(new Player(sc.next(), 0));
         }
 
-        GameController gameController = new GameController();
+        Board board = new Board(100, ladders, players, snakes);
+        Dice dice = new Dice();
 
-
-
-
-//        Classes:
-//        Create model class for all these entities
-//        Create a class for the game
-//        Create a class for game controller
+        GameController gameController = new GameController(board, dice, players.size());
+        gameController.startGame();
     }
 }
