@@ -23,15 +23,19 @@ public class GameController {
         while (winner == null) {
             for (Player player : players) {
                 diceNumber = dice.rollDice();
+                System.out.println("Player: " + player.getName() + " playing at position " + player.getPosition());
+                System.out.println("Dice rolled: " + diceNumber);
                 playerPosition = player.getPosition();
                 for (Snake snake : board.getSnakes()) {
                     if (snake.getHead().equals(player.getPosition() + diceNumber)) {
+                        System.out.println("Snake detected at position: " + snake.getHead());
                         player.setPosition(snake.getTail());
                         break;
                     }
                 }
                 for (Ladder ladder : board.getLadders()) {
                     if (ladder.getBottomPosition().equals(player.getPosition() + diceNumber)) {
+                        System.out.println("Ladder detected at position: " + ladder.getBottomPosition());
                         player.setPosition(ladder.getTopPosition());
                         break;
                     }
