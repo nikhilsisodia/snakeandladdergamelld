@@ -23,7 +23,7 @@ public class Game {
         return board;
     }
 
-    private static List<Player> takeInputForPlayers(Scanner sc) {
+    private List<Player> takeInputForPlayers(Scanner sc) {
         List<Player> players = new ArrayList<>();
         Integer noOfPlayers = sc.nextInt();
         for (int i = 0; i < noOfPlayers; i++) {
@@ -32,7 +32,7 @@ public class Game {
         return players;
     }
 
-    private static List<Ladder> takeInputForLadders(Scanner sc) {
+    private List<Ladder> takeInputForLadders(Scanner sc) {
         List<Ladder> ladders = new ArrayList<>();
         Integer noOfLadders = sc.nextInt();
         for (int i = 0; i < noOfLadders; i++) {
@@ -41,7 +41,7 @@ public class Game {
         return ladders;
     }
 
-    private static List<Snake> takeInputForSnakes(Scanner scanner) {
+    private List<Snake> takeInputForSnakes(Scanner scanner) {
         List<Snake> snakes = new ArrayList<>();
         Integer noOfSnakes = scanner.nextInt();
         for (int i = 0; i < noOfSnakes; i++) {
