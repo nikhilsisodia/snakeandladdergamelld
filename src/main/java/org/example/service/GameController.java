@@ -3,60 +3,87 @@ package org.example.service;
 import org.example.models.*;
 
 import java.util.List;
+import java.util.Objects;
 
 public class GameController {
     private Board board;
     private Dice dice;
-    private Integer numberOfPlayers;
 
-    public GameController(Board board, Dice dice, Integer numberOfPlayers) {
+    public GameController(Board board, Dice dice) {
         this.board = board;
         this.dice = dice;
-        this.numberOfPlayers = numberOfPlayers;
     }
 
-    public Player startGame() {
+    public void startGame() {
         List<Player> players = board.getPlayers();
         Integer diceNumber;
         Integer playerPosition;
-        Player winner = null;
-        while (winner == null) {
+        while (true) {
             for (Player player : players) {
+                playerPosition = player.getPosition();
                 diceNumber = dice.rollDice();
                 System.out.println("Player: " + player.getName() + " playing at position " + player.getPosition());
                 System.out.println("Dice rolled: " + diceNumber);
-                playerPosition = player.getPosition();
-                for (Snake snake : board.getSnakes()) {
-                    if (snake.getHead().equals(player.getPosition() + diceNumber)) {
-                        System.out.println("Snake detected at position: " + snake.getHead());
-                        player.setPosition(snake.getTail());
-                        break;
-                    }
-                }
-                for (Ladder ladder : board.getLadders()) {
-                    if (ladder.getBottomPosition().equals(player.getPosition() + diceNumber)) {
-                        System.out.println("Ladder detected at position: " + ladder.getBottomPosition());
-                        player.setPosition(ladder.getTopPosition());
-                        break;
-                    }
-                }
-                if (playerPosition.equals(player.getPosition())) {
-                    player.setPosition(playerPosition + diceNumber);
-                }
 
-                if (player.getPosition() > board.getBoardSize()) {
-                    player.setPosition(player.getPosition() - diceNumber);
-                }
+                if (playerMovedBySnake(player, playerPosition, diceNumber)) continue;
 
-                System.out.println("Player " + player.getName() + " moved from position " + playerPosition + " to "
-                        + player.getPosition());
+                if (playerMovedByLadder(player, playerPosition, diceNumber)) continue;
 
-                if (player.getPosition().equals(board.getBoardSize())) {
-                    winner = player;
-                    System.out.println("Player " + player.getName() + " won the game !!");
-                }
+                if (playerMovedNaturallyByDice(player, playerPosition, diceNumber)) continue;
+
+                System.out.println("Player:" + player.getName() + " did not move\n");
             }
         }
-        return winner;
+    }
+
+    private boolean playerMovedNaturallyByDice(Player player, Integer playerPosition, Integer diceNumber) {
+        if ((playerPosition + diceNumber) <= board.getBoardSize()) {
+            player.setPosition(playerPosition + diceNumber);
+            declareWinnerIfPlayerWon(playerPosition, player);
+            return true;
+        }
+        return false;
+    }
+
+    private boolean playerMovedByLadder(Player player, Integer playerPosition, Integer diceNumber) {
+        Integer finalPosition = board.ladderHeadPositionIfAtTail(playerPosition + diceNumber);
+        if (Objects.nonNull(finalPosition)) {
+            System.out.println("Ladder detected at position: " + (playerPosition + diceNumber));
+            movePlayerByLadder(player, playerPosition, finalPosition);
+            return true;
+        }
+        return false;
+    }
+
+    private void movePlayerByLadder(Player player, Integer playerPosition, Integer finalPosition) {
+        player.setPosition(finalPosition);
+        declareWinnerIfPlayerWon(playerPosition, player);
+    }
+
+    private boolean playerMovedBySnake(Player player, Integer playerPosition, Integer diceNumber) {
+        Integer finalPosition = board.snakeTailPositionIfAtHead(playerPosition + diceNumber);
+        if (Objects.nonNull(finalPosition)) {
+            System.out.println("Snake detected at position: " + (playerPosition + diceNumber));
+            movePlayerBySnake(player, playerPosition, finalPosition);
+            return true;
+        }
+        return false;
+    }
+
+    private void movePlayerBySnake(Player player, Integer playerPosition, Integer finalPosition) {
+        player.setPosition(finalPosition);
+        declareWinnerIfPlayerWon(playerPosition, player);
+    }
+
+    private void declareWinnerIfPlayerWon(Integer playerPosition, Player player) {
+        if (hasPlayerWon(player)) {
+            System.out.println("Player " + player.getName() + " won the game !!\n");
+            System.exit(0);
+        }
+        System.out.println("Player moved from position " + playerPosition + " to " + player.getPosition() + "\n");
+    }
+
+    private boolean hasPlayerWon(Player player) {
+        return player.getPosition().equals(board.getBoardSize());
     }
 }

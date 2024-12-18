@@ -32,15 +32,6 @@ public class Board {
         return snakes;
     }
 
-    public void movePlayer(final Player player, final Integer newPosition) {
-        for(Player player1: players) {
-            if (player1.equals(player)) {
-                player1.setPosition(newPosition);
-            }
-        }
-        return;
-    }
-
     public Integer snakeTailPositionIfAtHead(final Integer position) {
         for (Snake snake: snakes) {
             if(snake.getHead().equals(position))
@@ -55,9 +46,5 @@ public class Board {
                 return ladder.getTopPosition();
         }
         return null;
-    }
-
-    public Boolean isFinalPosition(final Integer position) {
-        return boardSize.equals(position);
     }
 }

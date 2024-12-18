@@ -4,7 +4,7 @@ public class Snake {
     private Integer tail;
     private Integer head;
 
-    public Snake(Integer tail, Integer head) {
+    public Snake(Integer head, Integer tail) {
         this.tail = tail;
         this.head = head;
     }
